@@ -18,6 +18,18 @@ class CircularLinkedList {
   insert(index, value) {
     this.log(this.insert.name, { value, index });
 
+    if (index == 0) return this.insertFirst(value);
+
+    if (index == this.#length - 1) return this.insertLast(value);
+
+    const nodeBeforeIndex = this.get(index - 1);
+    const newNode = new this.#Node(value);
+    newNode.next = nodeBeforeIndex.next;
+    newNode.prev = nodeBeforeIndex;
+    nodeBeforeIndex.next.prev = newNode;
+    nodeBeforeIndex.next = newNode;
+    this.#length++;
+
     return this;
   }
 
@@ -47,18 +59,27 @@ class CircularLinkedList {
 
   insertLast(value) {
     this.log(this.insertLast.name, { value });
-    const node = new this.#Node(value);
-
+    const newNode = new this.#Node(value);
+    newNode.prev = this.tail;
+    newNode.next = this.head;
+    this.head.prev = newNode;
+    this.tail.next = newNode;
+    this.tail = newNode;
+    this.#length++;
     return this;
   }
 
   toArray() {
+    let i = 0;
     const array = [];
     let node = this.head;
     while (node) {
       array.push(node.value);
       if (node.next == this.head) break;
       node = node.next;
+      i++;
+
+      if (i > this.#length) break;
     }
     return array;
   }
@@ -79,6 +100,7 @@ class CircularLinkedList {
     console.log("-------");
     console.log(this.toArray().toString());
     console.log(this.toArrayReverse().toString());
+    console.log({ length: this.#length });
     console.log("--------");
     return this;
   }
@@ -86,18 +108,38 @@ class CircularLinkedList {
   delete(index) {
     this.log(this.delete.name, { index });
 
+    if (index == 0) return this.deleteFirst();
+
+    if (index == this.#length - 1) return this.deleteLast();
+
+    const node = this.get(index);
+
+    node.next.prev = node.prev;
+    node.prev.next = node.next;
+
+    this.#length--;
+
     return this;
   }
 
   deleteFirst() {
     this.log(this.deleteFirst.name);
-
+    const newHead = this.head.next;
+    newHead.prev = this.tail;
+    this.tail.next = newHead;
+    this.head = newHead;
+    this.#length--;
     return this;
   }
 
   deleteLast() {
     this.log(this.deleteLast.name);
+    const newTail = this.tail.prev;
+    newTail.next = this.head;
+    this.head.prev = newTail;
+    this.tail = newTail;
 
+    this.#length--;
     return this;
   }
 

@@ -25,4 +25,4 @@ list
   .delete(4)
   .display();
 
-console.log(list.get(3));
+console.log("At Index 3 : ", list.get(3).value);
