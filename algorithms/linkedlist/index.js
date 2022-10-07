@@ -1,9 +1,10 @@
 const { LinkedList } = require("./linkded-list");
 const { DoublyLinkedList } = require("./doubly-linked-list");
-// const { LinkedList } = require("./linkded-list");
+const { CircularLinkedList } = require("./circular-linkded-list");
 
 // const list = new LinkedList();
-const list = new DoublyLinkedList();
+// const list = new DoublyLinkedList();
+const list = new CircularLinkedList();
 
 list
   .insertFirst(12)
